@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 sidebar text-white p-4">
+            <h4 class="mb-4">
+                <i class="fas fa-user-graduate me-2"></i>
+                {{ student.user.get_full_name() }}
+            </h4>
+            
+            <div class="mb-4">
+                <h6>Mi Progreso</h6>
+                <div class="progress mb-2">
+                    <div class="progress-bar" style="width: {{ avg_progress * 100 }}%"></div>
+                </div>
+                <small>{{ "%.1f"|format(avg_progress * 100) }}% Completado</small>
+            </div>
+            
+            <div class="mb-4">
+                <h6>Estadísticas</h6>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-book me-2"></i>{{ courses|length }} Cursos</li>
+                    <li><i class="fas fa-clipboard-check me-2"></i>{{ completed_diagnostics }} Diagnósticos</li>
+                    <li><i class="fas fa-route me-2"></i>{{ active_learning_paths }} Rutas Activas</li>
+                </ul>
+            </div>
+            
+            {% if vark_profile %}
+            <div class="mb-4">
+                <h6>Estilo de Aprendizaje</h6>
+                <div class="badge bg-light text-dark">
+                    {{ vark_profile.dominant }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 main-content p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Mi Dashboard</h2>
+                <div>
+                    <a href="{{ url_for('student.vark_questionnaire') }}" class="btn btn-outline-primary me-2">
+                        <i class="fas fa-brain me-1"></i>Cuestionario VARK
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Welcome Message -->
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">
+                    <i class="fas fa-lightbulb me-2"></i>¡Bienvenido al STI!
+                </h4>
+                <p>Tu experiencia de aprendizaje personalizada está lista. Completa el examen diagnóstico y cuestionario VARK para obtener tu ruta de aprendizaje personalizada.</p>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-book fa-2x text-primary mb-2"></i>
+                            <h5 class="card-title">{{ courses|length }}</h5>
+                            <p class="card-text">Cursos Matriculados</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-clipboard-check fa-2x text-success mb-2"></i>
+                            <h5 class="card-title">{{ completed_diagnostics }}</h5>
+                            <p class="card-text">Diagnósticos Completados</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-route fa-2x text-info mb-2"></i>
+                            <h5 class="card-title">{{ active_learning_paths }}</h5>
+                            <p class="card-text">Rutas Activas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+                            <h5 class="card-title">{{ "%.1f"|format(avg_progress * 100) }}%</h5>
+                            <p class="card-text">Progreso Promedio</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- My Courses -->
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="mb-3">Mis Cursos</h4>
+                    
+                    {% if courses %}
+                        <div class="row">
+                            {% for course in courses %}
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ course.name }}</h5>
+                                        <p class="card-text">{{ course.description[:100] }}...</p>
+                                        <div class="mb-3">
+                                            <small class="text-muted">
+                                                <i class="fas fa-user me-1"></i>{{ course.teacher.user.get_full_name() }}
+                                            </small>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <a href="{{ url_for('student.course_detail', course_id=course.id) }}" class="btn btn-primary btn-sm">
+                                                Ver Curso
+                                            </a>
+                                            <small class="text-muted">{{ course.code }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No tienes cursos matriculados</h5>
+                            <p class="text-muted">Contacta a tu docente para ser matriculado en un curso.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Learning Style Profile -->
+            {% if vark_profile %}
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-brain me-2"></i>Mi Perfil de Aprendizaje
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Estilo Dominante: {{ vark_profile.dominant }}</h6>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Visual</span>
+                                            <span>{{ "%.1f"|format(vark_profile.visual) }}%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-primary" style="width: {{ vark_profile.visual }}%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Auditivo</span>
+                                            <span>{{ "%.1f"|format(vark_profile.auditory) }}%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-success" style="width: {{ vark_profile.auditory }}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Lectura/Escritura</span>
+                                            <span>{{ "%.1f"|format(vark_profile.reading) }}%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-info" style="width: {{ vark_profile.reading }}%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Kinestésico</span>
+                                            <span>{{ "%.1f"|format(vark_profile.kinesthetic) }}%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-warning" style="width: {{ vark_profile.kinesthetic }}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

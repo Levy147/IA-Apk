@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-gradient text-white py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    Sistema de Tutoría Inteligente
+                </h1>
+                <p class="lead mb-4">
+                    Personaliza tu experiencia de aprendizaje con inteligencia artificial. 
+                    Nuestro sistema adapta el contenido a tu estilo de aprendizaje y ritmo individual.
+                </p>
+                <div class="d-flex gap-3">
+                    {% if not current_user.is_authenticated %}
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Comienza Ahora
+                        </a>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                        </a>
+                    {% else %}
+                        {% if current_user.user_type.value == 'student' %}
+                            <a href="{{ url_for('student.dashboard') }}" class="btn btn-light btn-lg">
+                                <i class="fas fa-tachometer-alt me-2"></i>Mi Dashboard
+                            </a>
+                        {% elif current_user.user_type.value == 'teacher' %}
+                            <a href="{{ url_for('teacher.dashboard') }}" class="btn btn-light btn-lg">
+                                <i class="fas fa-chalkboard-teacher me-2"></i>Dashboard Docente
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <i class="fas fa-brain fa-10x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="display-5 fw-bold">Características Principales</h2>
+                <p class="lead text-muted">Tecnología avanzada para una educación personalizada</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-search fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Examen Diagnóstico</h5>
+                        <p class="card-text">
+                            Evaluación multiformal que identifica tus conocimientos previos 
+                            y áreas de mejora para personalizar tu experiencia de aprendizaje.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-user-cog fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Estilos de Aprendizaje VARK</h5>
+                        <p class="card-text">
+                            Identificación automática de tu estilo de aprendizaje 
+                            (Visual, Auditivo, Lectura/Escritura, Kinestésico) para 
+                            optimizar la selección de recursos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-route fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Rutas Personalizadas</h5>
+                        <p class="card-text">
+                            Generación automática de rutas de aprendizaje adaptadas 
+                            a tu perfil, progreso y objetivos educativos específicos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-robot fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Inteligencia Artificial</h5>
+                        <p class="card-text">
+                            Motor de IA que adapta continuamente el contenido y 
+                            la dificultad basándose en tu rendimiento y preferencias.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-chart-line fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Seguimiento de Progreso</h5>
+                        <p class="card-text">
+                            Monitoreo detallado de tu progreso con analíticas 
+                            avanzadas y retroalimentación personalizada.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-users fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Para Estudiantes y Docentes</h5>
+                        <p class="card-text">
+                            Plataforma integral que beneficia tanto a estudiantes 
+                            como a docentes con herramientas especializadas para cada rol.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h3 class="display-4 fw-bold text-primary" id="total-students">0</h3>
+                    <p class="text-muted">Estudiantes Activos</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h3 class="display-4 fw-bold text-primary" id="total-teachers">0</h3>
+                    <p class="text-muted">Docentes</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h3 class="display-4 fw-bold text-primary" id="total-courses">0</h3>
+                    <p class="text-muted">Cursos Disponibles</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h3 class="display-4 fw-bold text-primary" id="completed-diagnostics">0</h3>
+                    <p class="text-muted">Diagnósticos Completados</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="display-5 fw-bold">¿Cómo Funciona?</h2>
+                <p class="lead text-muted">Proceso simple y efectivo</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-3 text-center">
+                <div class="step-icon mb-3">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <span class="fs-2 fw-bold">1</span>
+                    </div>
+                </div>
+                <h5>Registro</h5>
+                <p class="text-muted">Crea tu cuenta como estudiante o docente</p>
+            </div>
+            
+            <div class="col-md-3 text-center">
+                <div class="step-icon mb-3">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <span class="fs-2 fw-bold">2</span>
+                    </div>
+                </div>
+                <h5>Diagnóstico</h5>
+                <p class="text-muted">Completa el examen diagnóstico y cuestionario VARK</p>
+            </div>
+            
+            <div class="col-md-3 text-center">
+                <div class="step-icon mb-3">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <span class="fs-2 fw-bold">3</span>
+                    </div>
+                </div>
+                <h5>Ruta Personalizada</h5>
+                <p class="text-muted">Recibe tu ruta de aprendizaje adaptada</p>
+            </div>
+            
+            <div class="col-md-3 text-center">
+                <div class="step-icon mb-3">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <span class="fs-2 fw-bold">4</span>
+                    </div>
+                </div>
+                <h5>Aprende y Progreso</h5>
+                <p class="text-muted">Aprende a tu ritmo con seguimiento continuo</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-4">¿Listo para Transformar tu Aprendizaje?</h2>
+        <p class="lead mb-4">
+            Únete a la revolución de la educación personalizada con inteligencia artificial
+        </p>
+        {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg">
+                <i class="fas fa-rocket me-2"></i>Comienza Gratis
+            </a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Load statistics
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/stats')
+            .then(response => response.json())
+            .then(data => {
+                animateCounter('total-students', data.total_students);
+                animateCounter('total-teachers', data.total_teachers);
+                animateCounter('total-courses', data.total_courses);
+                animateCounter('completed-diagnostics', data.completed_diagnostics);
+            })
+            .catch(error => {
+                console.error('Error loading stats:', error);
+            });
+    });
+    
+    function animateCounter(elementId, targetValue) {
+        const element = document.getElementById(elementId);
+        const duration = 2000; // 2 seconds
+        const start = 0;
+        const increment = targetValue / (duration / 16); // 60fps
+        let current = start;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= targetValue) {
+                current = targetValue;
+                clearInterval(timer);
+            }
+            element.textContent = Math.floor(current);
+        }, 16);
+    }
+</script>
+{% endblock %}

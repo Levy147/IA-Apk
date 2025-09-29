@@ -1,0 +1,38 @@
+# Sistema de Tutoría Inteligente (STI) - Dependencias
+# Framework web
+Flask==2.3.3
+Flask-SQLAlchemy==3.0.5
+Flask-Login==0.6.3
+Flask-WTF==1.1.1
+Flask-Migrate==4.0.5
+Flask-CORS==4.0.0
+
+# Base de datos MySQL
+PyMySQL==1.1.0
+SQLAlchemy==2.0.21
+cryptography==41.0.4
+
+# Inteligencia Artificial y Machine Learning
+scikit-learn==1.3.0
+pandas==2.0.3
+numpy==1.24.3
+scipy==1.11.1
+
+# Procesamiento de datos
+requests==2.31.0
+beautifulsoup4==4.12.2
+python-dotenv==1.0.0
+
+# Autenticación y seguridad
+bcrypt==4.0.1
+PyJWT==2.8.0
+Werkzeug==2.3.7
+
+# Utilidades
+python-dateutil==2.8.2
+pytz==2023.3
+email-validator==2.0.0
+
+# Desarrollo y testing
+pytest==7.4.0
+pytest-flask==1.2.0

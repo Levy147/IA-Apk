@@ -1,0 +1,89 @@
+# Entorno virtual
+venv/
+venv_new/
+env/
+ENV/
+
+# Archivos de configuración sensibles
+.env
+config_local.py
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Archivos de distribución
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Archivos de log
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Archivos de base de datos
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos subidos por usuarios
+uploads/
+static/uploads/
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de sistema
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Archivos de Flask
+instance/
+.webassets-cache
+
+# Archivos de testing
+.coverage
+.pytest_cache/
+.tox/
+.nox/
+
+# Archivos de Jupyter Notebook
+.ipynb_checkpoints
+
+# Archivos de pyenv
+.python-version
+
+# Archivos de pipenv
+Pipfile.lock
+
+# Archivos de poetry
+poetry.lock

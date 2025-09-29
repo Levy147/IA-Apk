@@ -1,0 +1,30 @@
+# Configuración del Sistema de Tutoría Inteligente (STI)
+# Copia este archivo como .env y configura las variables según tu entorno
+
+# Configuración de Flask
+FLASK_APP=app.py
+FLASK_ENV=development
+FLASK_CONFIG=development
+SECRET_KEY=tu-clave-secreta-muy-segura-aqui
+
+# Configuración de la base de datos MySQL (XAMPP)
+DEV_DATABASE_URL=mysql+pymysql://root:@localhost:3306/sti_database
+DATABASE_URL=mysql+pymysql://root:@localhost:3306/sti_database_prod
+
+# Configuración de Google Forms (opcional)
+GOOGLE_FORMS_API_KEY=tu-api-key-de-google-forms
+GOOGLE_FORMS_FORM_ID=tu-form-id-de-google-forms
+
+# Configuración de logging
+LOG_LEVEL=DEBUG
+
+# Configuración de archivos
+UPLOAD_FOLDER=uploads
+MAX_CONTENT_LENGTH=16777216
+
+# Configuración de IA
+AI_MODEL_PATH=models/
+MIN_QUESTIONS_DIAGNOSTIC=25
+VARK_QUESTIONS=16
+MAX_LEARNING_PATH_LENGTH=50
+MIN_MASTERY_THRESHOLD=0.7
