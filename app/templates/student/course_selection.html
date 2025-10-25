@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 sidebar text-white p-4">
+            <h4 class="mb-4">
+                <i class="fas fa-user-graduate me-2"></i>
+                {{ current_user.get_full_name() }}
+            </h4>
+            
+            <div class="mb-4">
+                <h6>Tu Perfil VARK</h6>
+                {% if student.dominant_learning_style %}
+                <div class="badge bg-success fs-6 mb-2">
+                    <i class="fas fa-check me-1"></i>{{ student.dominant_learning_style }} - {{ vark_style_name }}
+                </div>
+                <small class="text-muted">{{ vark_description }}</small>
+                {% else %}
+                <div class="badge bg-warning fs-6">
+                    <i class="fas fa-exclamation-triangle me-1"></i>Pendiente
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-4">
+                <h6>Próximos Pasos</h6>
+                <ul class="list-unstyled small">
+                    <li><i class="fas fa-check me-2 text-success"></i>VARK Completado</li>
+                    <li><i class="fas fa-arrow-right me-2 text-primary"></i>Seleccionar Curso</li>
+                    <li><i class="fas fa-circle me-2 text-muted"></i>Examen Diagnóstico</li>
+                    <li><i class="fas fa-circle me-2 text-muted"></i>Ruta Personalizada</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 main-content p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="fas fa-graduation-cap me-2"></i>Selecciona tu Curso
+                </h2>
+                <a href="{{ url_for('student.dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Volver al Dashboard
+                </a>
+            </div>
+            
+            <!-- VARK Profile Info -->
+            {% if student.dominant_learning_style %}
+            <div class="alert alert-success" role="alert">
+                <h5 class="alert-heading">
+                    <i class="fas fa-brain me-2"></i>¡Perfil VARK Completado!
+                </h5>
+                <p>Tu estilo de aprendizaje dominante es <strong>{{ student.dominant_learning_style }}</strong> ({{ vark_style_name }}). 
+                El sistema personalizará tu experiencia de aprendizaje según tus preferencias.</p>
+            </div>
+            {% endif %}
+            
+            <!-- Course Selection Instructions -->
+            <div class="alert alert-info" role="alert">
+                <h5 class="alert-heading">
+                    <i class="fas fa-info-circle me-2"></i>¿Qué sigue después?
+                </h5>
+                <p>Selecciona el curso en el que quieres trabajar. Una vez que elijas un curso:</p>
+                <ol class="mb-0">
+                    <li>Tomarás un <strong>examen diagnóstico</strong> de 25+ preguntas</li>
+                    <li>El sistema generará tu <strong>ruta de aprendizaje personalizada</strong></li>
+                    <li>Recibirás <strong>recursos adaptados</strong> a tu estilo VARK</li>
+                    <li>El sistema se <strong>adaptará continuamente</strong> a tu progreso</li>
+                </ol>
+            </div>
+            
+            <!-- Available Courses -->
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="mb-3">Cursos Disponibles</h4>
+                    
+                    {% if available_courses %}
+                        <div class="row">
+                            {% for course in available_courses %}
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="card h-100 course-card" data-course-id="{{ course.id }}">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="card-title mb-0">
+                                            <i class="fas fa-book me-2"></i>{{ course.name }}
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">{{ course.description[:150] }}{% if course.description|length > 150 %}...{% endif %}</p>
+                                        
+                                        <div class="mb-3">
+                                            <small class="text-muted">
+                                                <i class="fas fa-user me-1"></i><strong>Docente:</strong> {{ course.teacher.user.get_full_name() }}
+                                            </small><br>
+                                            <small class="text-muted">
+                                                <i class="fas fa-code me-1"></i><strong>Código:</strong> {{ course.code }}
+                                            </small><br>
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar me-1"></i><strong>Duración:</strong> {{ course.duration_weeks }} semanas
+                                            </small>
+                                        </div>
+                                        
+                                        <!-- Course Features -->
+                                        <div class="mb-3">
+                                            <h6 class="text-primary">Características del Curso:</h6>
+                                            <ul class="list-unstyled small">
+                                                <li><i class="fas fa-check text-success me-1"></i>Examen diagnóstico personalizado</li>
+                                                <li><i class="fas fa-check text-success me-1"></i>Ruta de aprendizaje adaptativa</li>
+                                                <li><i class="fas fa-check text-success me-1"></i>Recursos según tu estilo VARK</li>
+                                                <li><i class="fas fa-check text-success me-1"></i>Seguimiento de progreso continuo</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button class="btn btn-primary w-100 select-course-btn" data-course-id="{{ course.id }}">
+                                            <i class="fas fa-play me-1"></i>Iniciar Curso
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-graduation-cap fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No hay cursos disponibles</h5>
+                            <p class="text-muted">Contacta a tu docente para ser matriculado en un curso.</p>
+                            <a href="{{ url_for('student.dashboard') }}" class="btn btn-outline-primary">
+                                <i class="fas fa-arrow-left me-1"></i>Volver al Dashboard
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Course Selection Modal -->
+<div class="modal fade" id="courseSelectionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-graduation-cap me-2"></i>Confirmar Selección de Curso
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                    <h6>¡Perfecto! Tu perfil VARK está listo</h6>
+                </div>
+                
+                <div class="alert alert-info">
+                    <h6 class="alert-heading">¿Estás listo para comenzar?</h6>
+                    <p class="mb-0">Al confirmar, serás matriculado en el curso y podrás:</p>
+                    <ul class="mb-0 mt-2">
+                        <li>Tomar el examen diagnóstico</li>
+                        <li>Recibir tu ruta de aprendizaje personalizada</li>
+                        <li>Acceder a recursos adaptados a tu estilo VARK</li>
+                    </ul>
+                </div>
+                
+                <div class="course-info">
+                    <h6>Curso Seleccionado:</h6>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h6 class="card-title" id="selectedCourseName"></h6>
+                            <p class="card-text small" id="selectedCourseDescription"></p>
+                            <small class="text-muted">
+                                <i class="fas fa-user me-1"></i><span id="selectedCourseTeacher"></span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmCourseSelection">
+                    <i class="fas fa-check me-1"></i>Confirmar y Comenzar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let selectedCourseId = null;
+    
+    // Handle course selection
+    document.querySelectorAll('.select-course-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            selectedCourseId = this.dataset.courseId;
+            const courseCard = this.closest('.course-card');
+            
+            // Get course information
+            const courseName = courseCard.querySelector('.card-title').textContent.replace('📚 ', '');
+            const courseDescription = courseCard.querySelector('.card-text').textContent;
+            const courseTeacher = courseCard.querySelector('small').textContent.replace('👨‍🏫 Docente: ', '');
+            
+            // Update modal content
+            document.getElementById('selectedCourseName').textContent = courseName;
+            document.getElementById('selectedCourseDescription').textContent = courseDescription;
+            document.getElementById('selectedCourseTeacher').textContent = courseTeacher;
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('courseSelectionModal'));
+            modal.show();
+        });
+    });
+    
+    // Handle course confirmation
+    document.getElementById('confirmCourseSelection').addEventListener('click', function() {
+        if (selectedCourseId) {
+            // Show loading state
+            this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Procesando...';
+            this.disabled = true;
+            
+            // Redirect to course enrollment
+            window.location.href = `/student/enroll-course/${selectedCourseId}`;
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 sidebar text-white p-4">
+            <h5 class="mb-4">
+                <i class="fas fa-user-graduate me-2"></i>
+                {{ current_user.get_full_name() }}
+            </h5>
+            
+            <nav>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="{{ url_for('student.dashboard') }}" class="d-flex align-items-center text-white text-decoration-none p-2 rounded hover-bg-light">
+                            <i class="fas fa-home me-2"></i>
+                            <span>Inicio</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none p-2 rounded bg-primary">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span>Mi Perfil</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{ url_for('student.resources') }}" class="d-flex align-items-center text-white text-decoration-none p-2 rounded hover-bg-light">
+                            <i class="fas fa-folder-open me-2"></i>
+                            <span>Recursos</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 main-content p-4" style="background: #f8f9fa;">
+            <h2 class="mb-4">
+                <i class="fas fa-user-circle text-primary me-2"></i>
+                Mi Perfil
+            </h2>
+            
+            <!-- Información del Perfil -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-3 text-center mb-3 mb-md-0">
+                            <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center mx-auto" style="width: 120px; height: 120px;">
+                                <i class="fas fa-user text-primary" style="font-size: 60px;"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">Nombre Completo</label>
+                                        <input type="text" class="form-control" value="{{ current_user.get_full_name() }}" readonly>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">Correo Electrónico</label>
+                                        <input type="email" class="form-control" value="{{ current_user.email }}" readonly>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">ID de Estudiante</label>
+                                        <input type="text" class="form-control" value="{{ student.student_id }}" readonly>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">Nivel Académico</label>
+                                        <input type="text" class="form-control" value="{{ student.academic_level or 'No especificado' }}" readonly>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Estilo de Aprendizaje VARK -->
+            {% if student.dominant_learning_style %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h5 class="mb-3">
+                        <i class="fas fa-brain text-info me-2"></i>
+                        Mi Estilo de Aprendizaje
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <div class="rounded-circle bg-info bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-2" style="width: 80px; height: 80px;">
+                                {% if student.dominant_learning_style == 'V' %}
+                                    <i class="fas fa-eye text-info" style="font-size: 40px;"></i>
+                                {% elif student.dominant_learning_style == 'A' %}
+                                    <i class="fas fa-volume-up text-success" style="font-size: 40px;"></i>
+                                {% elif student.dominant_learning_style == 'R' %}
+                                    <i class="fas fa-book text-warning" style="font-size: 40px;"></i>
+                                {% else %}
+                                    <i class="fas fa-hands text-danger" style="font-size: 40px;"></i>
+                                {% endif %}
+                            </div>
+                            <h4 class="mb-0">
+                                {% if student.dominant_learning_style == 'V' %}
+                                    Visual
+                                {% elif student.dominant_learning_style == 'A' %}
+                                    Auditivo
+                                {% elif student.dominant_learning_style == 'R' %}
+                                    Lectura/Escritura
+                                {% else %}
+                                    Kinestésico
+                                {% endif %}
+                            </h4>
+                        </div>
+                        <div class="col-md-9">
+                            <p class="mb-3">
+                                {% if student.dominant_learning_style == 'V' %}
+                                    Prefieres aprender con diagramas, gráficos, mapas e imágenes. Los recursos visuales te ayudan a comprender mejor.
+                                {% elif student.dominant_learning_style == 'A' %}
+                                    Aprendes mejor escuchando explicaciones, discusiones y audio. Prefieres las clases orales y los podcasts.
+                                {% elif student.dominant_learning_style == 'R' %}
+                                    Te gusta leer textos, tomar notas y escribir. Los libros y documentos son tus mejores aliados.
+                                {% else %}
+                                    Aprendes haciendo. Prefieres actividades prácticas, experimentos y ejercicios hands-on.
+                                {% endif %}
+                            </p>
+                            <div class="alert alert-info border-0 mb-0">
+                                <i class="fas fa-lightbulb me-2"></i>
+                                <strong>Recomendación:</strong> Te sugerimos recursos de aprendizaje adaptados a tu estilo para maximizar tu rendimiento.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-brain text-muted mb-3" style="font-size: 48px;"></i>
+                    <h5>Descubre tu Estilo de Aprendizaje</h5>
+                    <p class="text-muted">Completa el cuestionario VARK para obtener recomendaciones personalizadas</p>
+                    <a href="{{ url_for('student.vark_questionnaire') }}" class="btn btn-primary">
+                        <i class="fas fa-clipboard-list me-2"></i>Hacer Cuestionario VARK
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Progreso por Materia -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="mb-4">
+                        <i class="fas fa-chart-line text-success me-2"></i>
+                        Mi Progreso por Curso
+                    </h5>
+                    
+                    <div class="row">
+                        {% if student.enrollments %}
+                        {% for enrollment in student.enrollments[:3] %}
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3 border rounded">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="rounded-circle bg-primary bg-opacity-10 p-2 me-2">
+                                        <i class="fas fa-book text-primary"></i>
+                                    </div>
+                                    <h6 class="mb-0">{{ enrollment.course.name }}</h6>
+                                </div>
+                                <div class="d-flex justify-content-between mb-1">
+                                    <small class="text-muted">Progreso</small>
+                                    <small class="fw-bold">{{ [75, 60, 40][loop.index0 % 3] }}%</small>
+                                </div>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar bg-primary" style="width: {{ [75, 60, 40][loop.index0 % 3] }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="col-12 text-center py-4">
+                            <i class="fas fa-book-open text-muted mb-3" style="font-size: 48px;"></i>
+                            <p class="text-muted">No estás inscrito en ningún curso aún</p>
+                            <a href="{{ url_for('student.courses') }}" class="btn btn-primary">
+                                <i class="fas fa-search me-2"></i>Explorar Cursos
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-bg-light:hover {
+    background: rgba(255,255,255,0.1);
+}
+</style>
+{% endblock %}
+

@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 sidebar text-white p-4">
+            <h5 class="mb-4">
+                <i class="fas fa-user-graduate me-2"></i>
+                {{ current_user.get_full_name() }}
+            </h5>
+            
+            <div class="mb-4">
+                <h6>📚 {{ course.name }}</h6>
+                <small class="text-muted">{{ course.code }}</small>
+            </div>
+            
+            <div class="mb-4">
+                <a href="{{ url_for('student.dashboard') }}" class="btn btn-sm btn-outline-light w-100">
+                    <i class="fas fa-arrow-left me-2"></i>Volver
+                </a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 main-content p-4" style="background: #f8f9fa;">
+            <!-- Header -->
+            <div class="mb-4">
+                <h2>
+                    <i class="fas fa-book-open text-primary me-2"></i>
+                    {{ course.name }} - Unidades de Aprendizaje
+                </h2>
+                <p class="text-muted">Accede al material de cada unidad desde Google Drive</p>
+            </div>
+            
+            <!-- Información del Curso -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="mb-2">{{ course.name }}</h5>
+                            <p class="text-muted mb-0">{{ course.description }}</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a href="https://drive.google.com/drive/folders/1ls2_3KTMXf31Kj2rYrFRHu-eAasHqnZx?usp=drive_link" 
+                               target="_blank" 
+                               class="btn btn-warning">
+                                <i class="fab fa-google-drive me-2"></i>Ver Todo el Drive
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lista de Unidades -->
+            <div class="row">
+                <!-- Unidad 1 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-header border-0 bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-book me-2"></i>Unidad 1
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-2">Números Naturales</h6>
+                            <p class="text-muted small mb-3">Números naturales, operaciones básicas, propiedades fundamentales</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary">7 archivos</span>
+                                <a href="https://drive.google.com/drive/folders/1ls2_3KTMXf31Kj2rYrFRHu-eAasHqnZx?usp=drive_link" 
+                                   target="_blank" 
+                                   class="btn btn-sm btn-primary">
+                                    <i class="fas fa-folder-open me-1"></i>Abrir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Unidad 2 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-header border-0 bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-book me-2"></i>Unidad 2
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-2">Números Enteros</h6>
+                            <p class="text-muted small mb-3">Números enteros, operaciones con enteros, recta numérica</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-success">7 archivos</span>
+                                <a href="https://drive.google.com/drive/folders/1ls2_3KTMXf31Kj2rYrFRHu-eAasHqnZx?usp=drive_link" 
+                                   target="_blank" 
+                                   class="btn btn-sm btn-success">
+                                    <i class="fas fa-folder-open me-1"></i>Abrir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Unidad 3 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-header border-0 bg-info text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-book me-2"></i>Unidad 3
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-2">Fracciones</h6>
+                            <p class="text-muted small mb-3">Fracciones, operaciones, simplificación, fracciones equivalentes</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-info">7 archivos</span>
+                                <a href="https://drive.google.com/drive/folders/1ls2_3KTMXf31Kj2rYrFRHu-eAasHqnZx?usp=drive_link" 
+                                   target="_blank" 
+                                   class="btn btn-sm btn-info">
+                                    <i class="fas fa-folder-open me-1"></i>Abrir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Unidad 4 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-header border-0 bg-warning text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-book me-2"></i>Unidad 4
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-2">Números Decimales</h6>
+                            <p class="text-muted small mb-3">Decimales, conversiones, operaciones con números decimales</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-warning">7 archivos</span>
+                                <a href="https://drive.google.com/drive/folders/1ls2_3KTMXf31Kj2rYrFRHu-eAasHqnZx?usp=drive_link" 
+                                   target="_blank" 
+                                   class="btn btn-sm btn-warning">
+                                    <i class="fas fa-folder-open me-1"></i>Abrir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Unidad 5 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-header border-0 bg-danger text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-book me-2"></i>Unidad 5
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-2">Porcentajes</h6>
+                            <p class="text-muted small mb-3">Porcentajes, regla de tres, aplicaciones prácticas</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-danger">7 archivos</span>
+                                <a href="https://drive.google.com/drive/folders/1ls2_3KTMXf31Kj2rYrFRHu-eAasHqnZx?usp=drive_link" 
+                                   target="_blank" 
+                                   class="btn btn-sm btn-danger">
+                                    <i class="fas fa-folder-open me-1"></i>Abrir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Unidad 6 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-header border-0" style="background: #8b5cf6; color: white;">
+                            <h5 class="mb-0">
+                                <i class="fas fa-book me-2"></i>Unidad 6
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-2">Ecuaciones Lineales</h6>
+                            <p class="text-muted small mb-3">Ecuaciones de primer grado, sistemas de ecuaciones, problemas</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge" style="background: #8b5cf6;">7 archivos</span>
+                                <a href="https://drive.google.com/drive/folders/1ls2_3KTMXf31Kj2rYrFRHu-eAasHqnZx?usp=drive_link" 
+                                   target="_blank" 
+                                   class="btn btn-sm text-white" style="background: #8b5cf6;">
+                                    <i class="fas fa-folder-open me-1"></i>Abrir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Unidad 7 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-header border-0" style="background: #06b6d4; color: white;">
+                            <h5 class="mb-0">
+                                <i class="fas fa-book me-2"></i>Unidad 7
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-2">Geometría Básica</h6>
+                            <p class="text-muted small mb-3">Figuras geométricas, perímetro, área, volumen</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge" style="background: #06b6d4;">7 archivos</span>
+                                <a href="https://drive.google.com/drive/folders/1ls2_3KTMXf31Kj2rYrFRHu-eAasHqnZx?usp=drive_link" 
+                                   target="_blank" 
+                                   class="btn btn-sm text-white" style="background: #06b6d4;">
+                                    <i class="fas fa-folder-open me-1"></i>Abrir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Instrucciones -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="alert alert-info border-0 mb-0">
+                        <h5 class="mb-2">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Cómo usar los materiales
+                        </h5>
+                        <ul class="mb-0">
+                            <li>Haz clic en "Abrir" para acceder a cada unidad en Google Drive</li>
+                            <li>Descarga los archivos que necesites para estudiar sin conexión</li>
+                            <li>Los materiales incluyen: teoría, ejercicios resueltos y prácticas</li>
+                            <li>Sigue el orden de las unidades para un aprendizaje progresivo</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-lift {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+</style>
+{% endblock %}
+

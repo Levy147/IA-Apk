@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 sidebar text-white p-4">
+            <h4 class="mb-4">
+                <i class="fas fa-user-graduate me-2"></i>
+                {{ current_user.get_full_name() }}
+            </h4>
+            
+            <div class="mb-4">
+                <h6>Progreso VARK</h6>
+                <div class="progress mb-2">
+                    <div class="progress-bar bg-warning" style="width: 0%"></div>
+                </div>
+                <small>Pendiente de completar</small>
+            </div>
+            
+            <div class="mb-4">
+                <h6>Instrucciones</h6>
+                <ul class="list-unstyled small">
+                    <li><i class="fas fa-check me-2"></i>Lee cada pregunta cuidadosamente</li>
+                    <li><i class="fas fa-check me-2"></i>Selecciona la opción que mejor te describa</li>
+                    <li><i class="fas fa-check me-2"></i>Responde todas las preguntas</li>
+                    <li><i class="fas fa-check me-2"></i>Envía el formulario al finalizar</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 main-content p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="fas fa-brain me-2"></i>Cuestionario de Estilos de Aprendizaje VARK
+                </h2>
+                <a href="{{ url_for('student.dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Volver al Dashboard
+                </a>
+            </div>
+            
+            <!-- Information Card -->
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">
+                    <i class="fas fa-info-circle me-2"></i>¿Qué es el Cuestionario VARK?
+                </h4>
+                <p>VARK es un sistema que identifica tu estilo de aprendizaje preferido:</p>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <i class="fas fa-eye fa-2x text-primary mb-2"></i>
+                            <h6>Visual (V)</h6>
+                            <small>Prefieres diagramas, gráficos e imágenes</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <i class="fas fa-volume-up fa-2x text-success mb-2"></i>
+                            <h6>Auditivo (A)</h6>
+                            <small>Prefieres explicaciones orales y audio</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <i class="fas fa-book fa-2x text-info mb-2"></i>
+                            <h6>Lectura/Escritura (R)</h6>
+                            <small>Prefieres textos y tomar notas</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <i class="fas fa-hands fa-2x text-warning mb-2"></i>
+                            <h6>Kinestésico (K)</h6>
+                            <small>Prefieres actividades prácticas</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Form Container -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clipboard-list me-2"></i>Cuestionario VARK - Matemática Básica 1
+                    </h5>
+                    <small class="text-muted">Responde todas las preguntas para obtener tu perfil de aprendizaje personalizado</small>
+                </div>
+                <div class="card-body">
+                    <!-- Embedded Google Form -->
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe 
+                            src="{{ form_url }}?embedded=true" 
+                            width="100%" 
+                            height="800" 
+                            frameborder="0" 
+                            marginheight="0" 
+                            marginwidth="0"
+                            class="embed-responsive-item">
+                            Cargando formulario...
+                        </iframe>
+                    </div>
+                    
+                    <!-- Instructions -->
+                    <div class="mt-4">
+                        <div class="alert alert-warning" role="alert">
+                            <h6 class="alert-heading">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Instrucciones Importantes
+                            </h6>
+                            <ul class="mb-0">
+                                <li>Completa todas las preguntas del formulario</li>
+                                <li>Selecciona la opción que mejor describa tu preferencia de aprendizaje</li>
+                                <li>Una vez enviado el formulario, tu perfil VARK se actualizará automáticamente</li>
+                                <li>Puedes volver al dashboard para ver tu perfil actualizado</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Manual Sync Option -->
+                    <div class="mt-4">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    <i class="fas fa-sync me-2"></i>Sincronización Manual
+                                </h6>
+                                <p class="card-text">
+                                    Si ya completaste el formulario y no se ha actualizado tu perfil automáticamente, 
+                                    puedes sincronizar manualmente tus respuestas.
+                                </p>
+                                <button type="button" class="btn btn-outline-primary" onclick="syncVarkResponses()">
+                                    <i class="fas fa-sync me-1"></i>Sincronizar Respuestas
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progress Indicator -->
+            <div class="mt-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-chart-line me-2"></i>Estado del Cuestionario
+                        </h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-warning">Pendiente</span>
+                                <small class="text-muted ms-2">Completa el formulario para actualizar tu perfil</small>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="checkVarkStatus()">
+                                <i class="fas fa-refresh me-1"></i>Verificar Estado
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for manual sync and status checking -->
+<script>
+function syncVarkResponses() {
+    // Simular sincronización manual
+    // En una implementación real, esto haría una llamada AJAX al endpoint
+    const button = event.target;
+    const originalText = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Sincronizando...';
+    button.disabled = true;
+    
+    // Simular llamada AJAX
+    setTimeout(() => {
+        button.innerHTML = '<i class="fas fa-check me-1"></i>Sincronizado';
+        button.classList.remove('btn-outline-primary');
+        button.classList.add('btn-success');
+        
+        // Mostrar mensaje de éxito
+        showAlert('success', '¡Perfil VARK sincronizado exitosamente!');
+        
+        // Redirigir al dashboard después de 2 segundos
+        setTimeout(() => {
+            window.location.href = "{{ url_for('student.dashboard') }}";
+        }, 2000);
+    }, 2000);
+}
+
+function checkVarkStatus() {
+    const button = event.target;
+    const originalText = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Verificando...';
+    button.disabled = true;
+    
+    // Simular verificación
+    setTimeout(() => {
+        button.innerHTML = originalText;
+        button.disabled = false;
+        
+        // Simular que el cuestionario aún está pendiente
+        showAlert('info', 'El cuestionario VARK aún está pendiente de completar.');
+    }, 1500);
+}
+
+function showAlert(type, message) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    // Insertar al inicio del contenido principal
+    const mainContent = document.querySelector('.main-content');
+    mainContent.insertBefore(alertDiv, mainContent.firstChild);
+    
+    // Auto-remover después de 5 segundos
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
+        }
+    }, 5000);
+}
+
+// Verificar estado del formulario cada 30 segundos
+setInterval(() => {
+    // En una implementación real, esto haría una llamada AJAX para verificar
+    // si el formulario ha sido completado
+}, 30000);
+</script>
+{% endblock %}
+

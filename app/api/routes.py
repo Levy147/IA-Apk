@@ -9,6 +9,7 @@ from app.models import Student, Course, DiagnosticExam, LearningPath, Progress
 from app import db
 from app.ai.google_forms_integration import GoogleFormsIntegration
 from app.ai.learning_path_generator import LearningPathGenerator
+from app.ai.vark_forms_integration import VARKFormsIntegration
 import json
 
 @bp.route('/google-forms/responses', methods=['POST'])
@@ -210,4 +211,80 @@ def get_course_analytics(course_id):
         
     except Exception as e:
         current_app.logger.error(f"Error obteniendo analíticas: {str(e)}")
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
+@bp.route('/vark/sync-questions', methods=['POST'])
+def sync_vark_questions():
+    """Sincronizar preguntas VARK con la base de datos"""
+    try:
+        vark_integration = VARKFormsIntegration()
+        result = vark_integration.sync_vark_questions_to_database()
+        
+        if result['success']:
+            return jsonify({
+                'message': result['message'],
+                'questions_created': result.get('questions_created', 0)
+            })
+        else:
+            return jsonify({'error': result['error']}), 500
+            
+    except Exception as e:
+        current_app.logger.error(f"Error sincronizando preguntas VARK: {str(e)}")
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
+@bp.route('/vark/process-external', methods=['POST'])
+def process_vark_external():
+    """Procesar respuestas del formulario VARK externo"""
+    try:
+        data = request.get_json()
+        student_id = data.get('student_id')
+        responses = data.get('responses')
+        
+        if not student_id or not responses:
+            return jsonify({'error': 'ID de estudiante y respuestas requeridos'}), 400
+        
+        vark_integration = VARKFormsIntegration()
+        result = vark_integration.process_vark_responses_from_forms(student_id, responses)
+        
+        if result['success']:
+            return jsonify({
+                'message': 'Perfil VARK actualizado exitosamente',
+                'vark_scores': result['vark_scores'],
+                'dominant_style': result['dominant_style'],
+                'learning_preferences': result['learning_preferences']
+            })
+        else:
+            return jsonify({'error': result['error']}), 400
+            
+    except Exception as e:
+        current_app.logger.error(f"Error procesando VARK externo: {str(e)}")
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
+@bp.route('/vark/status/<int:student_id>')
+@login_required
+def get_vark_status(student_id):
+    """Obtener estado del cuestionario VARK de un estudiante"""
+    try:
+        # Verificar acceso
+        if current_user.user_type.value == 'student' and current_user.student_profile.id != student_id:
+            return jsonify({'error': 'Acceso denegado'}), 403
+        
+        student = Student.query.get_or_404(student_id)
+        
+        vark_status = {
+            'completed': bool(student.dominant_learning_style),
+            'dominant_style': student.dominant_learning_style,
+            'scores': {
+                'visual': student.vark_visual,
+                'auditory': student.vark_auditory,
+                'reading': student.vark_reading,
+                'kinesthetic': student.vark_kinesthetic
+            },
+            'form_url': VARKFormsIntegration().get_vark_form_url()
+        }
+        
+        return jsonify(vark_status)
+        
+    except Exception as e:
+        current_app.logger.error(f"Error obteniendo estado VARK: {str(e)}")
         return jsonify({'error': 'Error interno del servidor'}), 500

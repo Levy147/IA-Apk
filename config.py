@@ -23,6 +23,10 @@ class Config:
     GOOGLE_FORMS_API_KEY = os.environ.get('GOOGLE_FORMS_API_KEY')
     GOOGLE_FORMS_FORM_ID = os.environ.get('GOOGLE_FORMS_FORM_ID')
     
+    # Configuración específica del formulario VARK
+    VARK_FORM_ID = '1FAIpQLSf9eQT1ZEn_NncQiLdsvej-HZVQuFzjAYkqQU1UV4ORl-Lg9A'
+    VARK_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSf9eQT1ZEn_NncQiLdsvej-HZVQuFzjAYkqQU1UV4ORl-Lg9A/viewform'
+    
     # Configuración de IA
     AI_MODEL_PATH = 'models/'
     MIN_QUESTIONS_DIAGNOSTIC = 25

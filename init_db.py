@@ -29,9 +29,9 @@ def create_sample_data():
     
     # Docente de ejemplo
     teacher_user = User(
-        email='profesor@sti.com',
-        first_name='María',
-        last_name='González',
+        email='herbert.galeano@sti.com',
+        first_name='Herbert',
+        last_name='Galeano',
         user_type=UserType.TEACHER
     )
     teacher_user.set_password('profesor123')
@@ -42,8 +42,8 @@ def create_sample_data():
         user_id=teacher_user.id,
         teacher_id='T001',
         department='Matemáticas',
-        specialization='Álgebra y Cálculo',
-        years_experience=10
+        specialization='Matemáticas y Estadística',
+        years_experience=15
     )
     db.session.add(teacher_profile)
     
@@ -96,24 +96,59 @@ def create_sample_data():
     
     print("[OK] Usuarios creados exitosamente")
     
-    # Crear curso de ejemplo
-    print("[COURSE] Creando curso de ejemplo...")
+    # Crear cursos de ejemplo
+    print("[COURSE] Creando cursos...")
     
-    course = Course(
-        name='Matemáticas Básicas',
-        description='Curso introductorio de matemáticas que cubre conceptos fundamentales de álgebra, geometría y aritmética.',
-        code='MATH101',
-        teacher_id=teacher_profile.id,
-        grade_level='universidad',
-        subject='Matemáticas',
-        credits=3,
-        diagnostic_required=True,
-        min_diagnostic_questions=25
-    )
-    db.session.add(course)
+    courses_data = [
+        {
+            'name': 'Matemática Básica 1',
+            'description': 'Curso introductorio de matemáticas que cubre conceptos fundamentales de álgebra, geometría y aritmética. Incluye recursos VARK adaptados a tu estilo de aprendizaje.',
+            'code': 'MATH-BAS-1',
+            'subject': 'Matemáticas',
+            'credits': 4
+        },
+        {
+            'name': 'Química General 1',
+            'description': 'Fundamentos de química: estructura atómica, tabla periódica, enlaces químicos y reacciones. Enfoque teórico-práctico con laboratorios.',
+            'code': 'QUIM-GEN-1',
+            'subject': 'Ciencias',
+            'credits': 4
+        },
+        {
+            'name': 'Técnica Complementaria 1',
+            'description': 'Curso del área técnica complementaria enfocado en desarrollo de habilidades prácticas y aplicación de conocimientos. Recursos VARK incluidos.',
+            'code': 'TEC-COMP-1',
+            'subject': 'Área Técnica',
+            'credits': 3
+        },
+        {
+            'name': 'Social Humanística 1',
+            'description': 'Introducción a las ciencias sociales y humanidades. Estudio de sociedades, cultura, historia y pensamiento social. Recursos VARK adaptados.',
+            'code': 'SOC-HUM-1',
+            'subject': 'Ciencias Sociales',
+            'credits': 3
+        }
+    ]
+    
+    courses = []
+    for course_data in courses_data:
+        course = Course(
+            name=course_data['name'],
+            description=course_data['description'],
+            code=course_data['code'],
+            teacher_id=teacher_profile.id,
+            grade_level='universidad',
+            subject=course_data['subject'],
+            credits=course_data['credits'],
+            diagnostic_required=True,
+            min_diagnostic_questions=25
+        )
+        db.session.add(course)
+        courses.append(course)
+    
     db.session.flush()
     
-    print("[OK] Curso creado exitosamente")
+    print(f"[OK] {len(courses)} cursos creados exitosamente")
     
     # Crear competencias
     print("[TARGET] Creando competencias...")
@@ -148,7 +183,7 @@ def create_sample_data():
     competencies = []
     for comp_data in competencies_data:
         competency = Competency(
-            course_id=course.id,
+            course_id=courses[0].id,  # Matemáticas Básicas
             name=comp_data['name'],
             description=comp_data['description'],
             code=comp_data['code'],
@@ -207,7 +242,7 @@ def create_sample_data():
     
     for q_data in questions_data:
         question = Question(
-            course_id=course.id,
+            course_id=courses[0].id,  # Matemáticas Básicas
             competency_id=q_data['competency_id'],
             question_text=q_data['text'],
             question_type=q_data['type'],
@@ -271,7 +306,7 @@ def create_sample_data():
     
     for res_data in resources_data:
         resource = Resource(
-            course_id=course.id,
+            course_id=courses[0].id,  # Matemáticas Básicas
             competency_id=res_data['competency_id'],
             title=res_data['title'],
             description=res_data['description'],

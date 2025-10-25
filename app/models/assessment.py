@@ -162,6 +162,19 @@ class VARKQuestion(db.Model):
     
     def __repr__(self):
         return f'<VARKQuestion {self.question_number}>'
+    
+    def get_options(self):
+        """Obtener opciones VARK de la pregunta"""
+        options = {}
+        if self.option_v:
+            options['V'] = self.option_v
+        if self.option_a:
+            options['A'] = self.option_a
+        if self.option_r:
+            options['R'] = self.option_r
+        if self.option_k:
+            options['K'] = self.option_k
+        return options
 
 class VARKResponse(db.Model):
     """Respuestas del estudiante al cuestionario VARK"""

@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar Simplificado -->
+        <div class="col-md-3 col-lg-2 sidebar text-white p-4">
+            <h5 class="mb-4">
+                <i class="fas fa-user-graduate me-2"></i>
+                {{ current_user.get_full_name() }}
+            </h5>
+            
+            <div class="mb-4">
+                <h6>📚 {{ course.name }}</h6>
+                <small class="text-muted">{{ course.code }}</small>
+            </div>
+            
+            <div class="mb-4">
+                <h6>Acciones Rápidas</h6>
+                <div class="d-grid gap-2">
+                    {% if not diagnostic %}
+                    <a href="{{ url_for('student.diagnostic_exam', course_id=course.id) }}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-clipboard-check me-1"></i>Examen
+                    </a>
+                    {% endif %}
+                    <a href="{{ url_for('student.dashboard') }}" class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-arrow-left me-1"></i>Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 main-content p-4">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="fas fa-book me-2"></i>{{ course.name }}
+                </h2>
+                <div>
+                    <a href="{{ url_for('student.course_units', course_id=course.id) }}" class="btn btn-primary me-2">
+                        <i class="fas fa-folder-open me-1"></i>Ver Unidades
+                    </a>
+                    <a href="{{ url_for('student.dashboard') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-1"></i>Volver
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Información del Curso -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Información del Curso</h5>
+                    <p class="card-text">{{ course.description }}</p>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <strong>Código:</strong> {{ course.code }}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Profesor:</strong> {{ course.teacher.user.get_full_name() }}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Estado:</strong> 
+                            {% if enrollment %}
+                                <span class="badge bg-success">Inscrito</span>
+                            {% else %}
+                                <span class="badge bg-secondary">No inscrito</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Estado del Diagnóstico -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-clipboard-check me-2"></i>Examen Diagnóstico
+                    </h5>
+                    {% if diagnostic %}
+                        {% if diagnostic.is_completed %}
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Has completado el examen diagnóstico
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <strong>Calificación:</strong> 
+                                    {% if diagnostic.percentage is not none %}
+                                        {{ "%.1f"|format(diagnostic.percentage) }}%
+                                    {% else %}
+                                        Pendiente de calcular
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Fecha:</strong> 
+                                    {% if diagnostic.completed_at %}
+                                        {{ diagnostic.completed_at.strftime('%d/%m/%Y') }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Estado:</strong> 
+                                    <span class="badge bg-success">Completado</span>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-hourglass-half me-2"></i>
+                                Examen en progreso
+                            </div>
+                            <a href="{{ url_for('student.diagnostic_exam', course_id=course.id) }}" class="btn btn-primary">
+                                <i class="fas fa-play me-2"></i>Continuar Examen
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Aún no has realizado el examen diagnóstico
+                        </div>
+                        <a href="{{ url_for('student.diagnostic_exam', course_id=course.id) }}" class="btn btn-primary">
+                            <i class="fas fa-play me-2"></i>Comenzar Examen Diagnóstico
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Ruta de Aprendizaje -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-route me-2"></i>Ruta de Aprendizaje
+                    </h5>
+                    {% if learning_path %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Tienes una ruta de aprendizaje personalizada activa
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Progreso:</strong>
+                                <div class="progress mt-2">
+                                    <div class="progress-bar" style="width: {{ (learning_path.current_step / learning_path.total_steps * 100)|int }}%">
+                                        {{ (learning_path.current_step / learning_path.total_steps * 100)|int }}%
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Pasos:</strong> {{ learning_path.current_step }} de {{ learning_path.total_steps }}
+                            </div>
+                        </div>
+                        <a href="https://drive.google.com/drive/folders/1650yAVCLmN7zDJTITp_kZRD2n63Q4k1p?usp=drive_link" 
+                           target="_blank" 
+                           class="btn btn-primary mt-3">
+                            <i class="fas fa-book-open me-2"></i>Ver Recursos del Curso
+                        </a>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            {% if not diagnostic %}
+                                Completa el examen diagnóstico para generar tu ruta de aprendizaje personalizada
+                            {% else %}
+                                Tu ruta de aprendizaje está siendo generada...
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Recursos del Curso -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-folder me-2"></i>Recursos del Curso
+                    </h5>
+                    {% if course.resources %}
+                        <div class="list-group">
+                            {% for resource in course.resources %}
+                            <a href="{{ resource.url }}" target="_blank" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">
+                                        <i class="fas fa-file-alt me-2"></i>{{ resource.title }}
+                                    </h6>
+                                    <small>{{ resource.resource_type }}</small>
+                                </div>
+                                <p class="mb-1">{{ resource.description }}</p>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No hay recursos disponibles aún.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

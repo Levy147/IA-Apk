@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 sidebar text-white p-4">
+            <h5 class="mb-4">
+                <i class="fas fa-user-graduate me-2"></i>
+                {{ current_user.get_full_name() }}
+            </h5>
+            
+            <nav>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="{{ url_for('student.dashboard') }}" class="d-flex align-items-center text-white text-decoration-none p-2 rounded hover-bg-light">
+                            <i class="fas fa-home me-2"></i>
+                            <span>Inicio</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none p-2 rounded bg-primary">
+                            <i class="fas fa-book me-2"></i>
+                            <span>Todos los Cursos</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 main-content p-4" style="background: #f8f9fa;">
+            <!-- Header -->
+            <div class="mb-4">
+                <h2>
+                    <i class="fas fa-graduation-cap text-primary me-2"></i>
+                    Todos los Cursos Disponibles
+                </h2>
+                <p class="text-muted">Accede a los recursos de cada curso desde Google Drive</p>
+            </div>
+            
+            <!-- Acceso Directo al Drive Principal -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-3 bg-warning bg-opacity-10 p-3 me-3">
+                                    <i class="fab fa-google-drive text-warning fs-1"></i>
+                                </div>
+                                <div>
+                                    <h4 class="mb-1">Drive Principal de Recursos</h4>
+                                    <p class="text-muted mb-0">Accede a todos los recursos organizados por curso</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a href="https://drive.google.com/drive/folders/1650yAVCLmN7zDJTITp_kZRD2n63Q4k1p?usp=drive_link" 
+                               target="_blank" 
+                               class="btn btn-warning btn-lg">
+                                <i class="fab fa-google-drive me-2"></i>Abrir Drive Completo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Grid de Cursos - Prof. Herbert Galeano -->
+            <div class="row">
+                <!-- Matemática Básica 1 -->
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-header border-0 text-white" style="background: #3b82f6;">
+                            <h5 class="mb-0">
+                                <i class="fas fa-calculator me-2"></i>
+                                Matemática Básica 1
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-user-tie me-2"></i>
+                                <strong>Profesor:</strong> Herbert Galeano
+                            </p>
+                            <p class="text-muted mb-2"><strong>Código:</strong> MATH-BAS-1</p>
+                            <p class="mb-3">Curso introductorio de matemáticas que cubre conceptos fundamentales de álgebra, geometría y aritmética. Recursos VARK incluidos.</p>
+                            <div class="d-grid gap-2">
+                                <a href="https://drive.google.com/drive/folders/1650yAVCLmN7zDJTITp_kZRD2n63Q4k1p?usp=drive_link" 
+                                   target="_blank" 
+                                   class="btn text-white" style="background: #3b82f6;">
+                                    <i class="fas fa-folder-open me-2"></i>Ver Recursos VARK
+                                </a>
+                                <a href="https://drive.google.com/drive/folders/1ls2_3KTMXf31Kj2rYrFRHu-eAasHqnZx?usp=drive_link" 
+                                   target="_blank" 
+                                   class="btn btn-outline-primary">
+                                    <i class="fas fa-book me-2"></i>Ver 7 Unidades
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Química General 1 -->
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-header border-0 text-white" style="background: #10b981;">
+                            <h5 class="mb-0">
+                                <i class="fas fa-flask me-2"></i>
+                                Química General 1
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-user-tie me-2"></i>
+                                <strong>Profesor:</strong> Herbert Galeano
+                            </p>
+                            <p class="text-muted mb-2"><strong>Código:</strong> QUIM-GEN-1</p>
+                            <p class="mb-3">Fundamentos de química: estructura atómica, tabla periódica, enlaces químicos y reacciones químicas.</p>
+                            <div class="d-grid">
+                                <a href="https://drive.google.com/drive/folders/1650yAVCLmN7zDJTITp_kZRD2n63Q4k1p?usp=drive_link" 
+                                   target="_blank" 
+                                   class="btn text-white" style="background: #10b981;">
+                                    <i class="fas fa-folder-open me-2"></i>Ver Recursos
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Técnica Complementaria 1 -->
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-header border-0 text-white" style="background: #f59e0b;">
+                            <h5 class="mb-0">
+                                <i class="fas fa-cogs me-2"></i>
+                                Técnica Complementaria 1
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-user-tie me-2"></i>
+                                <strong>Profesor:</strong> Herbert Galeano
+                            </p>
+                            <p class="text-muted mb-2"><strong>Código:</strong> TEC-COMP-1</p>
+                            <p class="mb-3">Desarrollo de habilidades técnicas y prácticas. Recursos VARK adaptados a tu estilo de aprendizaje.</p>
+                            <div class="d-grid">
+                                <a href="https://drive.google.com/drive/folders/1650yAVCLmN7zDJTITp_kZRD2n63Q4k1p?usp=drive_link" 
+                                   target="_blank" 
+                                   class="btn text-white" style="background: #f59e0b;">
+                                    <i class="fas fa-folder-open me-2"></i>Ver Recursos VARK
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Social Humanística 1 -->
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-header border-0 text-white" style="background: #8b5cf6;">
+                            <h5 class="mb-0">
+                                <i class="fas fa-users me-2"></i>
+                                Social Humanística 1
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-user-tie me-2"></i>
+                                <strong>Profesor:</strong> Herbert Galeano
+                            </p>
+                            <p class="text-muted mb-2"><strong>Código:</strong> SOC-HUM-1</p>
+                            <p class="mb-3">Ciencias sociales y humanidades. Estudio de sociedades, cultura e historia. Recursos VARK adaptados.</p>
+                            <div class="d-grid">
+                                <a href="https://drive.google.com/drive/folders/1650yAVCLmN7zDJTITp_kZRD2n63Q4k1p?usp=drive_link" 
+                                   target="_blank" 
+                                   class="btn text-white" style="background: #8b5cf6;">
+                                    <i class="fas fa-folder-open me-2"></i>Ver Recursos VARK
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Información sobre Recursos VARK -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="mb-3">
+                        <i class="fas fa-brain text-info me-2"></i>
+                        ¿Qué son los Recursos VARK?
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                                <i class="fas fa-eye text-primary fs-4"></i>
+                            </div>
+                            <h6>Visual (V)</h6>
+                            <small class="text-muted">Diagramas, gráficos, imágenes</small>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                                <i class="fas fa-volume-up text-success fs-4"></i>
+                            </div>
+                            <h6>Auditivo (A)</h6>
+                            <small class="text-muted">Audio, explicaciones orales</small>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="rounded-circle bg-info bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                                <i class="fas fa-book text-info fs-4"></i>
+                            </div>
+                            <h6>Lectura (R)</h6>
+                            <small class="text-muted">Textos, documentos, notas</small>
+                        </div>
+                        <div class="col-md-3 text-center mb-3">
+                            <div class="rounded-circle bg-warning bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                                <i class="fas fa-hands text-warning fs-4"></i>
+                            </div>
+                            <h6>Kinestésico (K)</h6>
+                            <small class="text-muted">Prácticas, actividades</small>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-0 mt-3">
+                        <i class="fas fa-lightbulb text-warning me-2"></i>
+                        Los recursos están organizados según diferentes estilos de aprendizaje para que encuentres el material que mejor se adapte a ti.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-lift {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+}
+
+.hover-bg-light:hover {
+    background: rgba(255,255,255,0.1);
+}
+</style>
+{% endblock %}
+

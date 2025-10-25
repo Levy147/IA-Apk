@@ -42,9 +42,21 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Mi Dashboard</h2>
                 <div>
-                    <a href="{{ url_for('student.vark_questionnaire') }}" class="btn btn-outline-primary me-2">
+                    {% if not student.dominant_learning_style %}
+                    <a href="{{ url_for('student.vark_external_form') }}" class="btn btn-primary me-2" target="_blank">
                         <i class="fas fa-brain me-1"></i>Cuestionario VARK
                     </a>
+                    <a href="{{ url_for('student.vark_questionnaire') }}" class="btn btn-outline-primary me-2">
+                        <i class="fas fa-clipboard-list me-1"></i>VARK Interno
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('student.course_selection') }}" class="btn btn-success me-2">
+                        <i class="fas fa-graduation-cap me-1"></i>Seleccionar Curso
+                    </a>
+                    <span class="badge bg-success fs-6">
+                        <i class="fas fa-check me-1"></i>VARK Completado
+                    </span>
+                    {% endif %}
                 </div>
             </div>
             
@@ -55,6 +67,44 @@
                 </h4>
                 <p>Tu experiencia de aprendizaje personalizada está lista. Completa el examen diagnóstico y cuestionario VARK para obtener tu ruta de aprendizaje personalizada.</p>
             </div>
+            
+            <!-- VARK Information Card -->
+            {% if not student.dominant_learning_style %}
+            <div class="alert alert-warning" role="alert">
+                <h5 class="alert-heading">
+                    <i class="fas fa-brain me-2"></i>¡Completa tu Cuestionario VARK!
+                </h5>
+                <p>El cuestionario VARK nos ayuda a identificar tu estilo de aprendizaje preferido (Visual, Auditivo, Lectura/Escritura, o Kinestésico) para personalizar tu experiencia educativa.</p>
+                <hr>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>¿Qué es VARK?</strong><br>
+                        <small>Un sistema que identifica cómo aprendes mejor para adaptar el contenido a tu estilo.</small>
+                    </div>
+                    <a href="{{ url_for('student.vark_external_form') }}" class="btn btn-warning" target="_blank">
+                        <i class="fas fa-external-link-alt me-1"></i>Ir al Cuestionario
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-success" role="alert">
+                <h5 class="alert-heading">
+                    <i class="fas fa-check-circle me-2"></i>¡VARK Completado! ¿Listo para el siguiente paso?
+                </h5>
+                <p>Tu estilo de aprendizaje dominante es <strong>{{ student.dominant_learning_style }}</strong>. 
+                Ahora puedes seleccionar un curso y comenzar tu experiencia de aprendizaje personalizada.</p>
+                <hr>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>Próximo paso:</strong><br>
+                        <small>Selecciona un curso para tomar el examen diagnóstico y obtener tu ruta personalizada.</small>
+                    </div>
+                    <a href="{{ url_for('student.course_selection') }}" class="btn btn-success">
+                        <i class="fas fa-graduation-cap me-1"></i>Seleccionar Curso
+                    </a>
+                </div>
+            </div>
+            {% endif %}
             
             <!-- Quick Stats -->
             <div class="row mb-4">
