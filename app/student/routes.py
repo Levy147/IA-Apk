@@ -13,6 +13,7 @@ from app.ai.vark_analyzer import VARKAnalyzer
 from app.ai.vark_forms_integration import VARKFormsIntegration
 from datetime import datetime
 import json
+from config import Config
 
 @bp.route('/dashboard')
 @login_required
@@ -71,6 +72,28 @@ def profile():
     return render_template('student/profile.html', 
                          title='Mi Perfil',
                          student=student)
+
+@bp.route('/profile/learning-style', methods=['POST'])
+@login_required
+def update_learning_style():
+    """Actualizar manualmente el estilo de aprendizaje detectado (VARK)"""
+    if current_user.user_type.value != 'student':
+        flash('Acceso denegado.', 'error')
+        return redirect(url_for('main.index'))
+
+    student = current_user.student_profile
+    style = (request.form.get('learning_style') or '').upper()
+
+    valid = {'V', 'A', 'R', 'K'}
+    if style not in valid:
+        flash('Estilo no válido. Usa V, A, R o K.', 'error')
+        return redirect(url_for('student.profile'))
+
+    # Solo actualiza el dominante; puntajes se mantienen si existen
+    student.dominant_learning_style = style
+    db.session.commit()
+    flash('Estilo de aprendizaje actualizado.', 'success')
+    return redirect(url_for('student.profile'))
 
 @bp.route('/resources')
 @login_required
@@ -177,6 +200,21 @@ def diagnostic_exam(course_id):
     if not enrollment:
         flash('No estás matriculado en este curso.', 'error')
         return redirect(url_for('student.courses'))
+
+    # Si hay un formulario externo configurado para este curso, redirigir a ese flujo
+    name = (course.name or '').lower()
+    external_form_url = None
+    if 'química' in name or 'quimica' in name:
+        external_form_url = Config.DIAGNOSTIC_FORMS.get('quimica')
+    elif 'técnica' in name or 'tecnica' in name:
+        external_form_url = Config.DIAGNOSTIC_FORMS.get('tecnica_complementaria')
+    elif 'humanística' in name or 'humanistica' in name or 'social' in name:
+        external_form_url = Config.DIAGNOSTIC_FORMS.get('humanistica')
+    elif 'matemát' in name or 'matemat' in name:
+        external_form_url = Config.DIAGNOSTIC_FORMS.get('matematica')
+
+    if external_form_url:
+        return redirect(url_for('student.diagnostic_external_form', course_id=course_id))
     
     # Verificar si ya completó el diagnóstico
     existing_diagnostic = DiagnosticExam.query.filter_by(
@@ -207,8 +245,7 @@ def diagnostic_exam(course_id):
         db.session.add(diagnostic)
         db.session.commit()
     
-    # Obtener preguntas del examen (simuladas por ahora)
-    # En la implementación real, estas vendrían de Google Forms
+    # Obtener preguntas del examen (flujo genérico solo si no hay formulario externo)
     questions = get_diagnostic_questions(course_id, diagnostic.total_questions)
     
     return render_template('student/diagnostic_exam.html',
@@ -216,6 +253,38 @@ def diagnostic_exam(course_id):
                          course=course,
                          diagnostic=diagnostic,
                          questions=questions)
+
+@bp.route('/diagnostic/form/<int:course_id>')
+@login_required
+def diagnostic_external_form(course_id):
+    """Mostrar formulario de diagnóstico externo (Google Forms) por curso"""
+    if current_user.user_type.value != 'student':
+        flash('Acceso denegado.', 'error')
+        return redirect(url_for('main.index'))
+
+    student = current_user.student_profile
+    course = Course.query.get_or_404(course_id)
+
+    # Resolver URL del formulario según el nombre del curso
+    name = (course.name or '').lower()
+    form_url = None
+    if 'química' in name or 'quimica' in name:
+        form_url = Config.DIAGNOSTIC_FORMS.get('quimica')
+    elif 'técnica' in name or 'tecnica' in name:
+        form_url = Config.DIAGNOSTIC_FORMS.get('tecnica_complementaria')
+    elif 'humanística' in name or 'humanistica' in name or 'social' in name:
+        form_url = Config.DIAGNOSTIC_FORMS.get('humanistica')
+    elif 'matemát' in name or 'matemat' in name:
+        form_url = Config.DIAGNOSTIC_FORMS.get('matematica')
+
+    if not form_url:
+        flash('No hay formulario de diagnóstico configurado para este curso.', 'warning')
+        return redirect(url_for('student.course_detail', course_id=course_id))
+
+    return render_template('student/diagnostic_external_form.html',
+                         title=f'Diagnóstico - {course.name}',
+                         course=course,
+                         form_url=form_url)
 
 @bp.route('/diagnostic/<int:course_id>', methods=['POST'])
 @login_required

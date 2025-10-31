@@ -30,6 +30,18 @@ class Config:
     # Configuración de IA
     AI_MODEL_PATH = 'models/'
     MIN_QUESTIONS_DIAGNOSTIC = 25
+
+    # Formularios de diagnóstico por curso (Google Forms publicados)
+    DIAGNOSTIC_FORMS = {
+        # Química General
+        'quimica': 'https://docs.google.com/forms/d/e/1FAIpQLSduYLWmW6mpTcUqWZSLXMsUPIFJVftN_30KFaqyDhY8buZdcg/viewform',
+        # Técnica Complementaria
+        'tecnica_complementaria': 'https://docs.google.com/forms/d/e/1FAIpQLSePC8e8B1h0mGQ1BdchXyHlkRVLBHmnzqzmby7evoeLzh-HQg/viewform',
+        # Social Humanística 1
+        'humanistica': 'https://docs.google.com/forms/d/e/1FAIpQLSf2so9khw6pyEwPhg8E4itLZF1YBPl7lQMF45f3BuTiDm9WKQ/viewform',
+        # Matemática Básica 1
+        'matematica': 'https://docs.google.com/forms/d/e/1FAIpQLSf9eQT1ZEn_NncQiLdsvej-HZVQuFzjAYkqQU1UV4ORl-Lg9A/viewform'
+    }
     
     # Configuración de estilos de aprendizaje VARK
     VARK_QUESTIONS = 16  # Número de preguntas del cuestionario VARK
@@ -41,6 +53,7 @@ class Config:
 class DevelopmentConfig(Config):
     """Configuración para desarrollo"""
     DEBUG = True
+    SQLALCHEMY_ECHO = True
     # Configuración XAMPP MySQL
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'mysql+pymysql://root:@localhost:3306/sti_database'

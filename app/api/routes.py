@@ -11,6 +11,7 @@ from app.ai.google_forms_integration import GoogleFormsIntegration
 from app.ai.learning_path_generator import LearningPathGenerator
 from app.ai.vark_forms_integration import VARKFormsIntegration
 import json
+from sqlalchemy import text
 
 @bp.route('/google-forms/responses', methods=['POST'])
 def receive_google_forms_responses():
@@ -46,6 +47,21 @@ def receive_google_forms_responses():
     except Exception as e:
         current_app.logger.error(f"Error procesando respuestas de Google Forms: {str(e)}")
         return jsonify({'error': 'Error interno del servidor'}), 500
+
+@bp.route('/health/db')
+def db_health_check():
+    """Verificar conectividad y estado de la base de datos"""
+    try:
+        engine = db.get_engine()
+        with engine.connect() as conn:
+            conn.execute(text('SELECT 1'))
+        return jsonify({
+            'ok': True,
+            'url': str(engine.url).replace(engine.url.password or '', '***')
+        })
+    except Exception as e:
+        current_app.logger.error(f"DB health check failed: {str(e)}")
+        return jsonify({'ok': False, 'error': str(e)}), 500
 
 @bp.route('/learning-path/generate', methods=['POST'])
 @login_required

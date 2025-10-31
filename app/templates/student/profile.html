@@ -121,10 +121,27 @@
                                     Aprendes haciendo. Prefieres actividades prácticas, experimentos y ejercicios hands-on.
                                 {% endif %}
                             </p>
-                            <div class="alert alert-info border-0 mb-0">
+                            <div class="alert alert-info border-0 mb-3">
                                 <i class="fas fa-lightbulb me-2"></i>
                                 <strong>Recomendación:</strong> Te sugerimos recursos de aprendizaje adaptados a tu estilo para maximizar tu rendimiento.
                             </div>
+
+                            <form method="POST" action="{{ url_for('student.update_learning_style') }}" class="row g-2 align-items-end">
+                                <div class="col-auto">
+                                    <label for="learning_style" class="form-label mb-0">Actualizar estilo</label>
+                                    <select id="learning_style" name="learning_style" class="form-select">
+                                        <option value="V" {{ 'selected' if student.dominant_learning_style == 'V' else '' }}>Visual (V)</option>
+                                        <option value="A" {{ 'selected' if student.dominant_learning_style == 'A' else '' }}>Auditivo (A)</option>
+                                        <option value="R" {{ 'selected' if student.dominant_learning_style == 'R' else '' }}>Lectura/Escritura (R)</option>
+                                        <option value="K" {{ 'selected' if student.dominant_learning_style == 'K' else '' }}>Kinestésico (K)</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        <i class="fas fa-save me-1"></i>Guardar
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

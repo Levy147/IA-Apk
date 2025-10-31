@@ -26,6 +26,10 @@ try:
     # Crear la aplicación
     print("🔄 [3/4] Inicializando aplicación...")
     app = create_app()
+    try:
+        print(f"🗄️  DB URI: {app.config.get('SQLALCHEMY_DATABASE_URI')}")
+    except Exception:
+        pass
     
     # Importar modelos
     try:
@@ -48,6 +52,15 @@ try:
         try:
             db.create_all()
             print("✅ Base de datos inicializada correctamente")
+            # Verificación rápida de conectividad
+            try:
+                from sqlalchemy import text
+                engine = db.get_engine()
+                with engine.connect() as conn:
+                    conn.execute(text('SELECT 1'))
+                print("✅ Conexión a BD verificada (SELECT 1 ok)")
+            except Exception as e:
+                print(f"⚠️  Verificación de BD falló: {e}")
         except Exception as e:
             print(f"⚠️  Advertencia base de datos: {e}")
             print("   (La base de datos MySQL debe estar corriendo en XAMPP)")

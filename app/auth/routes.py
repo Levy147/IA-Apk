@@ -3,6 +3,7 @@ Rutas de autenticación
 """
 
 from flask import render_template, request, redirect, url_for, flash, session
+import logging
 from flask_login import login_user, logout_user, login_required, current_user
 from app.auth import bp
 from app.models import User, Student, Teacher
@@ -48,45 +49,56 @@ def register():
     
     form = RegistrationForm()
     if form.validate_on_submit():
-        # Verificar si el email ya existe
-        if User.query.filter_by(email=form.email.data).first():
-            flash('El email ya está registrado.', 'error')
+        try:
+            # Verificar si el email ya existe
+            if User.query.filter_by(email=form.email.data).first():
+                flash('El email ya está registrado.', 'error')
+                return render_template('auth/register.html', title='Registrarse', form=form)
+
+            # Crear usuario
+            user = User(
+                email=form.email.data,
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                user_type=UserType(form.user_type.data)
+            )
+            user.set_password(form.password.data)
+
+            db.session.add(user)
+            db.session.flush()  # Obtener user.id sin confirmar toda la transacción
+
+            # Crear perfil específico según tipo de usuario
+            if form.user_type.data == 'student':
+                student = Student(
+                    user_id=user.id,
+                    student_id=form.student_id.data,
+                    grade_level=form.grade_level.data,
+                    school=form.school.data
+                )
+                db.session.add(student)
+            elif form.user_type.data == 'teacher':
+                teacher = Teacher(
+                    user_id=user.id,
+                    teacher_id=form.teacher_id.data,
+                    department=form.department.data,
+                    specialization=form.specialization.data
+                )
+                db.session.add(teacher)
+
+            db.session.commit()
+
+            flash('¡Registro exitoso! Ya puedes iniciar sesión.', 'success')
+            return redirect(url_for('auth.login'))
+        except Exception as e:
+            db.session.rollback()
+            logging.exception("Error registrando usuario")
+            flash(f'Error al registrar usuario: {str(e)}', 'error')
             return render_template('auth/register.html', title='Registrarse', form=form)
-        
-        # Crear usuario
-        user = User(
-            email=form.email.data,
-            first_name=form.first_name.data,
-            last_name=form.last_name.data,
-            user_type=UserType(form.user_type.data)
-        )
-        user.set_password(form.password.data)
-        
-        db.session.add(user)
-        db.session.commit()
-        
-        # Crear perfil específico según tipo de usuario
-        if form.user_type.data == 'student':
-            student = Student(
-                user_id=user.id,
-                student_id=form.student_id.data,
-                grade_level=form.grade_level.data,
-                school=form.school.data
-            )
-            db.session.add(student)
-        elif form.user_type.data == 'teacher':
-            teacher = Teacher(
-                user_id=user.id,
-                teacher_id=form.teacher_id.data,
-                department=form.department.data,
-                specialization=form.specialization.data
-            )
-            db.session.add(teacher)
-        
-        db.session.commit()
-        
-        flash('¡Registro exitoso! Ya puedes iniciar sesión.', 'success')
-        return redirect(url_for('auth.login'))
+    elif request.method == 'POST':
+        # Mostrar errores de validación si el formulario no es válido
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f'{getattr(form, field).label.text}: {error}', 'error')
     
     return render_template('auth/register.html', title='Registrarse', form=form)
 
